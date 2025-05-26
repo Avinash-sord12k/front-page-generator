@@ -4,7 +4,7 @@ import { PDFDocument, rgb } from 'pdf-lib';
 
 const templatePath = './public/templates/base-adgips.pdf';
 const outputPath = './filled_output.pdf';
-const fontPath = './public/fonts/NotoSans-Italic-VariableFont_wdth,wght.ttf'; // path to your .ttf
+const fontPath = './public/fonts/NotoSans-VariableFont_wdth,wght.ttf'; // path to your .ttf
 
 const meta = {
   title: 'LAB MANUAL',
@@ -12,14 +12,20 @@ const meta = {
 };
 
 const data = {
-  Name: 'Avinash Jha',
-  Date: '2025-05-25',
-  Amount: '$10,000',
-  Subject: 'Data Structures',
-  Roll: '12345678'
+  'Name': 'Avinash Jha',
+  'Date': '2025-05-25',
+  'Amount': '$10,000',
+  'Subject': 'Data Structures',
+  'Roll': '12345678',
+  'Faculty Name': 'Mr. Neeraj',
+  'Subject Name': 'Statistics, Statistical Modelling and Data Analytics Lab',
+  'Paper Code': 'DA-304P',
+  'Student Name': 'Ayush Singh Negi',
+  'Enrolment No.': '14615603122',
+  'Section': 'T7',
 };
 
-async function fillPdf(meta, data) {
+async function fillPdf(meta: Record<string, string>, data: Record<string, string>) {
   const [pdfBytes, fontBytes] = await Promise.all([
     readFile(templatePath),
     readFile(fontPath)
@@ -58,20 +64,57 @@ async function fillPdf(meta, data) {
     color: rgb(0, 0, 0)
   });
 
-  // Data lines
+  // Data lines block (aligned columns)
+  const size = 14;
+  const lineGap = 22;
+
+  // Step 1: Measure the widest key
+  const keyWidths = Object.keys(data).map((k: string) => customFont.widthOfTextAtSize(k, size));
+  const maxKeyWidth = Math.max(...keyWidths);
+
+  const valueWidths = Object.values(data).map((t: string) => customFont.widthOfTextAtSize(t, size));
+  const maxValueWIdth = Math.max(...valueWidths)
+
+  // Step 2: Define margins
+  const padding = 10;
+  const colonWidth = customFont.widthOfTextAtSize(':', size);
+  const gapBetweenColumns = 8; // space between colon and value
+  const blockWidth = maxKeyWidth + colonWidth + gapBetweenColumns + maxValueWIdth; // 200 is estimated value column width
+
+  // Step 3: Center the whole block
+  const blockX = (width - blockWidth) / 2;
+  const keyX = blockX;
+  const colonX = keyX + maxKeyWidth;
+  const valueX = colonX + colonWidth + gapBetweenColumns;
+
+  // Step 4: Draw each line
   currentY -= 40;
   for (const [key, value] of Object.entries(data)) {
-    const text = `${key}: ${value}`;
-    const size = 14;
-    const textWidth = customFont.widthOfTextAtSize(text, size);
-    page.drawText(text, {
-      x: (width - textWidth) / 2,
+    page.drawText(key, {
+      x: keyX,
       y: currentY,
       size,
       font: customFont,
       color: rgb(0, 0, 0)
     });
-    currentY -= 22;
+
+    page.drawText(':', {
+      x: colonX,
+      y: currentY,
+      size,
+      font: customFont,
+      color: rgb(0, 0, 0)
+    });
+
+    page.drawText(value, {
+      x: valueX,
+      y: currentY,
+      size,
+      font: customFont,
+      color: rgb(0, 0, 0)
+    });
+
+    currentY -= lineGap;
   }
 
   const finalPdf = await pdfDoc.save();
