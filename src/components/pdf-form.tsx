@@ -1,19 +1,5 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormData, formSchema, defaultFields } from "@/lib/schema";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,15 +10,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  Loader2,
-  Download,
-  Share2,
-  Copy,
-  Plus,
-  Trash2,
-  GripVertical,
-} from "lucide-react";
-import { DndContext, closestCenter } from "@dnd-kit/core";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { defaultFields, FormData, formSchema } from "@/lib/schema";
+import { closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
@@ -40,8 +27,19 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useSensors, useSensor, PointerSensor } from "@dnd-kit/core";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Copy,
+  Download,
+  GripVertical,
+  Loader2,
+  Plus,
+  Share2,
+  Trash2,
+} from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 function SortableFieldWrapper({
   id,
@@ -69,7 +67,6 @@ export function PdfForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [pdfUrl, setPdfUrl] = useState("");
-  const router = useRouter();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -152,7 +149,7 @@ export function PdfForm() {
 
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (active.id !== over?.id) {
       const oldIndex = fields.findIndex((f) => f.id === active.id);
