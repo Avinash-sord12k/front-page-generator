@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fillPdf } from "./gen";
+import { fillPdf } from "./gen_service";
 
 export const dynamic = "force-dynamic"
 
