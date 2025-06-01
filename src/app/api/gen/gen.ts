@@ -29,14 +29,14 @@ export async function fillPdf(meta: Record<string, string>, data: Record<string,
 
   // Setup font manager
   const fontManager = new FontManager(pdfDoc, {
-    100: './public/fonts/static/NotoSans-Thin.ttf',
-    200: './public/fonts/static/NotoSans-ExtraLight.ttf',
-    300: './public/fonts/static/NotoSans-Light.ttf',
-    400: './public/fonts/static/NotoSans-Regular.ttf',
-    500: './public/fonts/static/NotoSans-Medium.ttf',
-    600: './public/fonts/static/NotoSans-SemiBold.ttf',
-    700: './public/fonts/static/NotoSans-Bold.ttf',
-    800: './public/fonts/static/NotoSans-ExtraBold.ttf'
+    100: path.join(process.cwd(), 'public', 'fonts', 'NotoSans-Thin.ttf'),
+    200: path.join(process.cwd(), 'public', 'fonts', 'NotoSans-ExtraLight.ttf'),
+    300: path.join(process.cwd(), 'public', 'fonts', 'NotoSans-Light.ttf'),
+    400: path.join(process.cwd(), 'public', 'fonts', 'NotoSans-Regular.ttf'),
+    500: path.join(process.cwd(), 'public', 'fonts', 'NotoSans-Medium.ttf'),
+    600: path.join(process.cwd(), 'public', 'fonts', 'NotoSans-SemiBold.ttf'),
+    700: path.join(process.cwd(), 'public', 'fonts', 'NotoSans-Bold.ttf'),
+    800: path.join(process.cwd(), 'public', 'fonts', 'NotoSans-ExtraBold.ttf'),
   });
   await fontManager.load();
 
