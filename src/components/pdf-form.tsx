@@ -112,7 +112,7 @@ export function PdfForm() {
         ),
       };
 
-      const response = await fetch("/api/gen", {
+      const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
