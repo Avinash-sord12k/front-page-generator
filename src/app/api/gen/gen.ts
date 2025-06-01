@@ -5,7 +5,7 @@ import os from 'os';
 import path from 'path';
 import { PDFDocument, rgb } from 'pdf-lib';
 
-const templatePath = './public/templates/base-adgips.pdf';
+const templatePath = path.join(process.cwd(), 'templates', 'base-adgips.pdf');
 const outputDir = os.tmpdir();
 
 const meta = {
@@ -23,6 +23,7 @@ const data = {
 };
 
 export async function fillPdf(meta: Record<string, string>, data: Record<string, string>) {
+  console.log({ templatePath })
   const pdfBytes = await readFile(templatePath);
   const pdfDoc = await PDFDocument.load(pdfBytes);
 
