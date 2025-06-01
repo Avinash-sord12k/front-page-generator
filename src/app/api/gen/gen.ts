@@ -1,11 +1,12 @@
-import { readFile, writeFile } from 'fs/promises';
-import { PDFDocument, rgb } from 'pdf-lib';
 import { FontManager } from '@/lib/font';
 import { randomUUID } from 'crypto';
+import { readFile, writeFile } from 'fs/promises';
+import os from 'os';
 import path from 'path';
+import { PDFDocument, rgb } from 'pdf-lib';
 
 const templatePath = './public/templates/base-adgips.pdf';
-const outputDir = './public/output';
+const outputDir = os.tmpdir();
 
 const meta = {
   title: 'LAB MANUAL',
@@ -125,7 +126,7 @@ export async function fillPdf(meta: Record<string, string>, data: Record<string,
   console.log('✅ PDF generated:', outputPath);
 
   return {
-    url: `/output/${fileName}`
+    url: `/api/files/${fileName}`
   }
 }
 

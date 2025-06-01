@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fillPdf } from "./gen";
 
+export const dynamic = "force-dynamic"
+
 export async function POST(req: NextRequest) {
 
   const body = await req.json();
-  console.log("🚀 ~ POST ~ body:", body)
 
   if (!body?.meta || !body?.data) {
     return NextResponse.json({
